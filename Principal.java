@@ -14,7 +14,7 @@ public class Principal {
         Alimentos comida = new Alimentos();
         Scanner sc = new Scanner(System.in);
         boolean flag=false; //Dummie para opciones
-        int op = 0; //Dummie para opciones
+        int opSwitch = 0;
         ArrayList<Alimentos> listaAlimentos = new ArrayList<Alimentos>();
 
         boolean flagNoEncontrado2 = true; // Para 2.a.
@@ -34,77 +34,90 @@ public class Principal {
          * 5. Cálculo de nutrientes
          */
 
-        Clases.Menues.MenuPrincipal();
-
-        /* 1. Crear alimento */
-        /* 1.a Guardar en base de datos */
-        listaAlimentos.add(Nuevo(comida));
-
-        /* 2. Leer alimento */
-        System.out.println("¿Desea revisar... \n1. un alimento en particular? \t2. todos los alimentos?");
-        switch(sc.nextInt()){
-            case 1: //2.a. Búsqueda individual
-                System.out.println("Ingrese el nombre del alimento a buscar");
-                String nombre = sc.nextLine().toLowerCase();//Para que no se tengan problemas con mayusculas y minusculas
-                for (Alimentos busqueda : listaAlimentos) {
-                    if (busqueda.getNombreAlimento().equals(nombre)){
-                        System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", busqueda.getNombreAlimento(), busqueda.getHidratos(), busqueda.getProteinas(), busqueda.getLipidos());
-                        flagNoEncontrado2 = false;
-                    }
-                }
-                    if (flagNoEncontrado2) {System.out.println("Alimento no encontrado");}
-                break;
-            case 2: //2.b. Búsqueda general
-                System.out.println("Lista de alimentos registrados");
-                for (Alimentos busqueda : listaAlimentos){
-                    System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", busqueda.getNombreAlimento(), busqueda.getHidratos(), busqueda.getProteinas(), busqueda.getLipidos());
-                }
-                break;
-            default: //Opción incorrecta
-                System.out.println("Opción incorrecta");
-                break;
+        do{
+            Clases.Menues.MenuPrincipal();
+            System.out.print("Ingrese la opción deseada \t");
+            opSwitch = sc.nextInt();
+            switch(opSwitch){
+                case 1:
+                     /* 1. Crear alimento */
+                    /* 1.a Guardar en base de datos */
+                    listaAlimentos.add(comida);
+                    Nuevo(comida);
+                    break;
+                case 2:
+                    /* 2. Leer alimento */
+                    System.out.println("¿Desea revisar... \n1. un alimento en particular? \t2. todos los alimentos?");
+                    switch(sc.nextInt()){
+                        case 1: //2.a. Búsqueda individual
+                            System.out.println("Ingrese el nombre del alimento a buscar");
+                            String nombre = sc.nextLine().toLowerCase();//Para que no se tengan problemas con mayusculas y minusculas
+                            for (Alimentos busqueda : listaAlimentos) {
+                                if (busqueda.getNombreAlimento().equals(nombre)){
+                                    System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", busqueda.getNombreAlimento(), busqueda.getHidratos(), busqueda.getProteinas(), busqueda.getLipidos());
+                                    flagNoEncontrado2 = false;
+                                }
+                            }
+                                if (flagNoEncontrado2) {System.out.println("Alimento no encontrado");}
+                            break;
+                        case 2: //2.b. Búsqueda general
+                            System.out.println("Lista de alimentos registrados");
+                            for (Alimentos busqueda : listaAlimentos){
+                                System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", busqueda.getNombreAlimento(), busqueda.getHidratos(), busqueda.getProteinas(), busqueda.getLipidos());
+                            }
+                            break;
+                        default: //Opción incorrecta
+                            System.out.println("Opción incorrecta");
+                        break;
+                        }
+                    break;
+                case 3:
+                /* 3. Actualizar alimento individual */
+                    System.out.println("Ingrese el nombre del alimento a actualizar");
+                        String nombre = sc.nextLine().toLowerCase();//Para que no se tengan problemas con mayusculas y minusculas
+                        for (Alimentos busqueda : listaAlimentos) {
+                            if (busqueda.getNombreAlimento().equals(nombre)){
+                                Actualizado(busqueda);
+                                flagNoEncontrado3 = false;
+                            }
+                        }
+                        if (flagNoEncontrado3) {System.out.println("Alimento no encontrado");}
+                    break;
+                case 4:
+                         /* 4. Borrar alimento individual */
+                        System.out.println("Ingrese el nombre del alimento que quiere eliminar");
+                        String borrado = sc.nextLine();
+                        for (Alimentos alimentos : listaAlimentos) {
+                            if (alimentos.getNombreAlimento().equalsIgnoreCase(borrado)){
+                                listaAlimentos.remove(borrado);
+                                flagNoEncontrado4 = false;
+                            }
+                        if (flagNoEncontrado4) {System.out.println("Alimento no encontrado");}
+                        }
+                    break;
+                case 5:
+                    /* 5. Cálculo de nutrientes */
+                    Calculo(listaAlimentos);
+                    break;
+                default:
+                    break;
         }
-
-        /* 3. Actualizar alimento individual */
-            System.out.println("Ingrese el nombre del alimento a actualizar");
-                String nombre = sc.nextLine().toLowerCase();//Para que no se tengan problemas con mayusculas y minusculas
-                for (Alimentos busqueda : listaAlimentos) {
-                    if (busqueda.getNombreAlimento().equals(nombre)){
-                        Actualizado(busqueda);
-                        flagNoEncontrado3 = false;
-                    }
-                }
-                if (flagNoEncontrado3) {System.out.println("Alimento no encontrado");}
-
-        /* 4. Borrar alimento individual */
-                System.out.println("Ingrese el nombre del alimento que quiere eliminar");
-                String borrado = sc.nextLine();
-                for (Alimentos alimentos : listaAlimentos) {
-                    if (alimentos.getNombreAlimento().equalsIgnoreCase(borrado)){
-                        listaAlimentos.remove(borrado);
-                        flagNoEncontrado4 = false;
-                    }
-                if (flagNoEncontrado4) {System.out.println("Alimento no encontrado");}
-
-                }
-
-        /* 5. Cálculo de nutrientes */
-                Calculo(listaAlimentos);
-
-                
+        } while (opSwitch<6);          
     } //Fin Main
 
-    public static Alimentos Nuevo(Alimentos Fcomida){
+    //Subprocesos
+
+    public static void Nuevo(Alimentos Fcomida){
         Scanner sc = new Scanner (System.in);
         System.out.println("Ingrese el nombre del alimento");
             Fcomida.setNombreAlimento(sc.nextLine());
             System.out.println("Ingrese los gramos de hidratos de carbono cada 100 gramos");
-            Fcomida.setHidratos(sc.nextDouble());
+            Fcomida.setHidratos(Double.parseDouble(sc.nextLine()));
             System.out.println("Ingrese los gramos de proteína cada 100 gramos");
-            Fcomida.setProteina(sc.nextDouble());
+            Fcomida.setProteina(Double.parseDouble(sc.nextLine()));
             System.out.println("Ingrese los gramos de lípidos cada 100 gramos");
-            Fcomida.setLipidos(sc.nextDouble());
-            return Fcomida;
+            Fcomida.setLipidos(Double.parseDouble(sc.nextLine()));
+            //return Fcomida;
     }
     
     public static void Actualizado(Alimentos Fcomida){
@@ -131,19 +144,21 @@ public class Principal {
             System.out.println("Ingrese el nombre del alimento");
             String Fcomida=sc.nextLine();
 
-        for (Alimentos busqueda : FlistaAlimentos) {
-            if (busqueda.getNombreAlimento().equals(Fcomida)){
-                acum_hidrato+=busqueda.getHidratos();acum_lipido+=busqueda.getLipidos();acum_proteina+=busqueda.getProteinas();
-                flagNoEncontradoCalculo = false;
+            for (Alimentos busqueda : FlistaAlimentos) {
+                if (busqueda.getNombreAlimento().equals(Fcomida)){
+                    acum_hidrato+=busqueda.getHidratos();acum_lipido+=busqueda.getLipidos();acum_proteina+=busqueda.getProteinas();
+                    flagNoEncontradoCalculo = false;
+                }
             }
-        }
-        if (flagNoEncontradoCalculo) {System.out.println("Alimento no encontrado");}
-        System.out.println("¿Desea ingresar otro alimento?");
-        flagSalidaDoCalculo = sc.nextBoolean();
+            if (flagNoEncontradoCalculo) {System.out.println("Alimento no encontrado");}
+            System.out.println("¿Desea ingresar otro alimento?");
+            if (sc.nextLine() == "no") {
+                flagSalidaDoCalculo = false; // ¿¿¿
+            }
 
-        if (flagSalidaDoCalculo){
-            System.out.printf("Total de \nHidratos de carbono: %f \nProteínas: %f \nLípidos: %f.", acum_hidrato,acum_proteina, acum_lipido);
-        }
+            if (flagSalidaDoCalculo){
+                System.out.printf("Total de \nHidratos de carbono: %f \nProteínas: %f \nLípidos: %f.", acum_hidrato,acum_proteina, acum_lipido);
+            }
 
         } while (flagSalidaDoCalculo);
         
