@@ -13,8 +13,7 @@ public class Registro {
 
     public static ArrayList<Alimentos> FlistaAlimentos (){
         //Creo una lista de objetos que sea listaAlimentos.
-        ArrayList<Alimentos> FlistaAlimentos = new ArrayList<Alimentos>();
-        return FlistaAlimentos;
+        return new ArrayList<>();
     }
 
     /**
@@ -88,6 +87,7 @@ public class Registro {
     }
 
 
+/*
 public static void ConsultaAlimentos(ArrayList<Alimentos> FlistaAlimentos){
     Scanner sc=new Scanner (System.in);
     String comidaConsulta;
@@ -100,5 +100,6 @@ public static void ConsultaAlimentos(ArrayList<Alimentos> FlistaAlimentos){
         System.out.println("El alimento no está ingresado");
     }
 }
+*/
 
 }
