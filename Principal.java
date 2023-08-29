@@ -36,8 +36,7 @@ public class Principal {
                 case 1:
                      /* 1. Crear alimento */
                     /* 1.a Guardar en base de datos */
-                    listaAlimentos.add(comida);
-                    Nuevo(comida);
+                    listaAlimentos.add(Nuevo());
                     break;
                 case 2:
                     /* 2. Leer alimento */
@@ -102,17 +101,20 @@ public class Principal {
 
     //Subprocesos
 
-    public static void Nuevo(Alimentos Fcomida){
+    public static Alimentos Nuevo(){
         Scanner sc = new Scanner (System.in);
+        String Fnombre;
+        double FHC,FPr,FL;
         System.out.println("Ingrese el nombre del alimento");
-            Fcomida.setNombreAlimento(sc.nextLine());
+            Fnombre=sc.next();
             System.out.println("Ingrese los gramos de hidratos de carbono cada 100 gramos");
-            Fcomida.setHidratos(Double.parseDouble(sc.nextLine()));
+            FHC=Double.parseDouble(sc.next());
             System.out.println("Ingrese los gramos de proteína cada 100 gramos");
-            Fcomida.setProteina(Double.parseDouble(sc.nextLine()));
+            FPr=Double.parseDouble(sc.next());
             System.out.println("Ingrese los gramos de lípidos cada 100 gramos");
-            Fcomida.setLipidos(Double.parseDouble(sc.nextLine()));
-            //return Fcomida;
+            FL=Double.parseDouble(sc.next());
+            Alimentos Fcomida = new Alimentos(Fnombre,FHC,FPr,FL);
+            return Fcomida;
     }
     
     public static void Actualizado(Alimentos Fcomida){
