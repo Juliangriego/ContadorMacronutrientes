@@ -43,17 +43,16 @@ public class Principal {
                     switch (sc.nextInt()) {
                         case 1: //2.a. Búsqueda individual
                             System.out.println("Ingrese el nombre del alimento a buscar");
-                            String nombre = sc.next();
-                            for (Alimentos busqueda : listaAlimentos) {
-                                String auxBusqueda = busqueda.getNombreAlimento();
-                                if (auxBusqueda.equals(nombre)) {
-                                    System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", busqueda.getNombreAlimento(), busqueda.getHidratos(), busqueda.getProteinas(), busqueda.getLipidos());
-                                    flagNoEncontrado2 = false;
-                                }
-                            }
-                            if (flagNoEncontrado2) {
-                                System.out.println("Alimento no encontrado");
-                            }
+                            String buscado = sc.next();
+                            int posicion = Busqueda(buscado, listaAlimentos);
+                            System.out.printf("\n " +
+                            "Nombre: %s \n --------------- \n " +
+                            "Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n " +
+                            "--------------- ",
+                                    listaAlimentos.get(posicion).getNombreAlimento(),
+                                    listaAlimentos.get(posicion).getHidratos(),
+                                    listaAlimentos.get(posicion).getProteinas(),
+                                    listaAlimentos.get(posicion).getLipidos());
                             break;
                         case 2: //2.b. Búsqueda general
                             System.out.println("Lista de alimentos registrados");
@@ -69,34 +68,16 @@ public class Principal {
                 case 3 -> {
                     /* 3. Actualizar alimento individual */
                     System.out.println("Ingrese el nombre del alimento a actualizar");
-                    String nombre = sc.next();
-                    for (Alimentos alimentos : listaAlimentos) {
-                        String auxBusqueda = alimentos.getNombreAlimento();
-                        if (auxBusqueda.equals(nombre)) {
-                            int posicion = listaAlimentos.indexOf(alimentos);
-                            listaAlimentos.add(Actualizado(listaAlimentos.get(posicion), listaAlimentos, posicion));
-                            flagNoEncontrado3 = false;
-                        }
-                    }
-                    if (flagNoEncontrado3) {
-                        System.out.println("Alimento no encontrado");
-                    }
+                    String buscado = sc.next();
+                    int posicion = Busqueda(buscado, listaAlimentos);
+                    listaAlimentos.add(Actualizado(listaAlimentos.get(posicion), listaAlimentos, posicion));
                 }
                 case 4 -> {
                     /* 4. Borrar alimento individual */
                     System.out.println("Ingrese el nombre del alimento que quiere eliminar");
-                    String borrado = sc.next();
-                    for (Alimentos alimentos : listaAlimentos) {
-                        String auxBusqueda = alimentos.getNombreAlimento();
-                        if (auxBusqueda.equals(borrado)) {
-                            int posicion = listaAlimentos.indexOf(alimentos);
-                            listaAlimentos.remove(posicion);
-                            flagNoEncontrado4 = false;
-                        }
-                    }
-                    if (flagNoEncontrado4) {
-                        System.out.println("Alimento no encontrado");
-                    }
+                    String buscado = sc.next();
+                    int posicion = Busqueda(buscado, listaAlimentos);
+                    listaAlimentos.remove(posicion);
                 }
                 case 5 ->
                     /* 5. Cálculo de nutrientes */
@@ -176,5 +157,19 @@ public class Principal {
         } while (flagSalidaDoCalculo);
 
     }
+    public static int Busqueda(String buscado, ArrayList<Alimentos> FlistaAlimentos){
+        boolean NoEncontrado = true;
+        for (Alimentos alimentos : FlistaAlimentos) {
+            String auxBusqueda = alimentos.getNombreAlimento();
+            if (auxBusqueda.equals(buscado)) {
+                return FlistaAlimentos.indexOf(alimentos);
+                NoEncontrado = false;
+            }
+        }
+        if (NoEncontrado) {
+            System.out.println("Búsqueda sin resultados");
+            //¿return -1?
+        }
 
+    }
 }
