@@ -1,11 +1,7 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Array;
+import Clases.Alimentos;
+
 import java.util.ArrayList;
 import java.util.Scanner;
-import Clases.*;
 
 public class Principal {
     public static void main (String[] args){
@@ -15,24 +11,22 @@ public class Principal {
         Scanner sc = new Scanner(System.in);
         boolean flag=false; //Dummie para opciones
         int opSwitch = 0;
-        ArrayList<Alimentos> listaAlimentos = new ArrayList<Alimentos>();
+        ArrayList<Alimentos> listaAlimentos = new ArrayList<>();
 
         boolean flagNoEncontrado2 = true; // Para 2.a.
         boolean flagNoEncontrado3 = true; // Para 3.
         boolean flagNoEncontrado4 = true; // Para 4.
 
-    
-        /*
-         * 1. Crear alimento
-         * 1.a. Guardar en base de datos
-         * 1.b. ¿Crear varias bases de datos?
-         * 2. Leer alimento
-         * 2.a. Revisar alimento individual
-         * 2.b. Revisar todos los alimentos
-         * 3. Actualizar alimento individual
-         * 4. Borrar alimento individual
-         * 5. Cálculo de nutrientes
-         */
+
+        // * 1. Crear alimento
+        // * 1.a. Guardar en base de datos
+        // * 1.b. ¿Crear varias bases de datos?
+        // * 2. Leer alimento
+        // * 2.a. Revisar alimento individual
+        // * 2.b. Revisar todos los alimentos
+        // * 3. Actualizar alimento individual
+        // * 4. Borrar alimento individual
+        // * 5. Cálculo de nutrientes
 
         do{
             Clases.Menues.MenuPrincipal();
@@ -51,9 +45,10 @@ public class Principal {
                     switch(sc.nextInt()){
                         case 1: //2.a. Búsqueda individual
                             System.out.println("Ingrese el nombre del alimento a buscar");
-                            String nombre = sc.nextLine().toLowerCase();//Para que no se tengan problemas con mayusculas y minusculas
+                            String nombre = sc.next();
                             for (Alimentos busqueda : listaAlimentos) {
-                                if (busqueda.getNombreAlimento().equals(nombre)){
+                                String auxBusqueda = busqueda.getNombreAlimento();
+                                if (auxBusqueda.equals(nombre)){
                                     System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", busqueda.getNombreAlimento(), busqueda.getHidratos(), busqueda.getProteinas(), busqueda.getLipidos());
                                     flagNoEncontrado2 = false;
                                 }
@@ -152,7 +147,7 @@ public class Principal {
             }
             if (flagNoEncontradoCalculo) {System.out.println("Alimento no encontrado");}
             System.out.println("¿Desea ingresar otro alimento?");
-            if (sc.nextLine() == "no") {
+            if (sc.nextLine().equals("no")) {
                 flagSalidaDoCalculo = false; // ¿¿¿
             }
 
