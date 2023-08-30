@@ -9,13 +9,13 @@ public class Principal {
         //Inicializamos todo lo necesario
         Alimentos comida = new Alimentos();
         Scanner sc = new Scanner(System.in);
-        boolean flag=false; //Dummie para opciones
+        //boolean flag=false; //Dummie para opciones
         int opSwitch;
         ArrayList<Alimentos> listaAlimentos = new ArrayList<>();
 
-        boolean flagNoEncontrado2 = true; // Para 2.a.
-        boolean flagNoEncontrado3 = true; // Para 3.
-        boolean flagNoEncontrado4 = true; // Para 4.
+        //boolean flagNoEncontrado2 = true; // Para 2.a.
+        //boolean flagNoEncontrado3 = true; // Para 3.
+        //boolean flagNoEncontrado4 = true; // Para 4.
 
 
         // * 1. Crear alimento
@@ -32,6 +32,7 @@ public class Principal {
             Clases.Menues.MenuPrincipal();
             System.out.print("Ingrese la opción deseada \t");
             opSwitch = sc.nextInt();
+
             switch (opSwitch) {
                 case 1 ->
                     /* 1. Crear alimento */
@@ -41,28 +42,27 @@ public class Principal {
                     /* 2. Leer alimento */
                     System.out.println("¿Desea revisar... \n1. un alimento en particular? \t2. todos los alimentos?");
                     switch (sc.nextInt()) {
-                        case 1: //2.a. Búsqueda individual
+                        case 1 -> { //2.a. Búsqueda individual
                             System.out.println("Ingrese el nombre del alimento a buscar");
                             String buscado = sc.next();
                             int posicion = Busqueda(buscado, listaAlimentos);
                             System.out.printf("\n " +
-                            "Nombre: %s \n --------------- \n " +
-                            "Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n " +
-                            "--------------- ",
+                                            "Nombre: %s \n --------------- \n " +
+                                            "Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n " +
+                                            "--------------- ",
                                     listaAlimentos.get(posicion).getNombreAlimento(),
                                     listaAlimentos.get(posicion).getHidratos(),
                                     listaAlimentos.get(posicion).getProteinas(),
                                     listaAlimentos.get(posicion).getLipidos());
-                            break;
-                        case 2: //2.b. Búsqueda general
+                        }
+                        case 2 -> { //2.b. Búsqueda general
                             System.out.println("Lista de alimentos registrados");
                             for (Alimentos busqueda : listaAlimentos) {
                                 System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", busqueda.getNombreAlimento(), busqueda.getHidratos(), busqueda.getProteinas(), busqueda.getLipidos());
                             }
-                            break;
-                        default: //Opción incorrecta
-                            System.out.println("Opción incorrecta");
-                            break;
+                        }
+                        default -> //Opción incorrecta
+                                System.out.println("Opción incorrecta");
                     }
                 }
                 case 3 -> {
@@ -159,17 +159,20 @@ public class Principal {
     }
     public static int Busqueda(String buscado, ArrayList<Alimentos> FlistaAlimentos){
         boolean NoEncontrado = true;
-        for (Alimentos alimentos : FlistaAlimentos) {
-            String auxBusqueda = alimentos.getNombreAlimento();
+        int resultado = 0;
+
+        for (Alimentos elemento : FlistaAlimentos) {
+            String auxBusqueda = elemento.getNombreAlimento();
             if (auxBusqueda.equals(buscado)) {
-                return FlistaAlimentos.indexOf(alimentos);
+                resultado = FlistaAlimentos.indexOf(elemento);
                 NoEncontrado = false;
             }
         }
         if (NoEncontrado) {
             System.out.println("Búsqueda sin resultados");
-            //¿return -1?
+            resultado = -1;
         }
 
+        return resultado;
     }
 }
