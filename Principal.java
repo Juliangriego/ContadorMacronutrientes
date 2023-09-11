@@ -1,7 +1,9 @@
 import Clases.Alimentos;
+import Clases.Registro;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Principal {
@@ -29,42 +31,30 @@ public class Principal {
             opSwitch = sc.nextInt();
 
             switch (opSwitch) {
-                case 1 -> listaAlimentos.add(Nuevo());
+                case 1 -> Nuevo();
                 case 2 -> {
                     System.out.println("¿Desea revisar... \n1. un alimento en particular? \t2. todos los alimentos?");
                     switch (sc.nextInt()) {
                         case 1 -> {
                             System.out.println("Ingrese el nombre del alimento a buscar");
-                            String buscado = sc.next();
-                            System.out.printf("\n " +
-                                            "Nombre: %s \n --------------- \n " +
-                                            "Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n " +
-                                            "--------------- ",
-                                    Clases.Registro.lectura(buscado).getNombreAlimento(),
-                                    Clases.Registro.lectura(buscado).getHidratos(),
-                                    Clases.Registro.lectura(buscado).getProteinas(),
-                                    Clases.Registro.lectura(buscado).getLipidos());
+                            Alimentos a = Clases.Registro.lectura(sc.nextLine());
+                            assert a != null;
+                            System.out.printf("Nombre del alimento: %s\nHidratos de carbono: %d\tProteinas:%d\tLìpidos: %d\n---------------",
+                                    a.getNombreAlimento(),a.getHidratos(),a.getProteinas(),a.getLipidos());
                         }
                         case 2 -> {
-                            System.out.println("Lista de alimentos registrados");
-                            for (Alimentos aux : listaAlimentos) {
-                                System.out.printf("\n Nombre: %s \n --------------- \n Hidratos: %f \t Proteínas: %f \t Lípidos: %f \n --------------- ", aux.getNombreAlimento(), aux.getHidratos(), aux.getProteinas(), aux.getLipidos());
-                            }
-                        }
+                            Clases.Registro.lecturaIndice();}
                         default -> System.out.println("Opción incorrecta");
                     }
                 }
                 case 3 -> {
-                    System.out.println("Ingrese el nombre del alimento a actualizar");
-                    String buscado = sc.next();
-                    listaAlimentos.add(Actualizado(Clases.Registro.lectura(buscado), listaAlimentos));
+                    Actualizado();
                 }
                 case 4 -> {
                     System.out.println("Ingrese el nombre del alimento que quiere eliminar");
-                    String buscado = sc.next();
-                    listaAlimentos.remove(Clases.Registro.lectura(buscado));
+                    Clases.Registro.lectura(sc.next());
                 }
-                case 5 -> Calculo(listaAlimentos);
+                case 5 -> Calculo();
                 default -> {
                 }
             }
@@ -73,10 +63,15 @@ public class Principal {
 
     //Subprocesos
 
-    public static Alimentos Nuevo() throws IOException {
+    /**
+     * En Nuevo() se guarda en variables auxiliares los datos que provee el usuario y se guarda() en el registro.
+     * @throws IOException
+     */
+    public static void Nuevo() throws IOException {
         Scanner sc = new Scanner(System.in);
         String Fnombre;
         double FHC, FPr, FL;
+
         System.out.println("Ingrese el nombre del alimento");
         Fnombre = sc.next();
         System.out.println("Ingrese los gramos de hidratos de carbono cada 100 gramos");
@@ -86,47 +81,60 @@ public class Principal {
         System.out.println("Ingrese los gramos de lípidos cada 100 gramos");
         FL = Double.parseDouble(sc.next());
         Clases.Registro.guardar(Fnombre, FHC, FPr, FL);
-        return new Alimentos(Fnombre, FHC, FPr, FL);
     }
 
-    public static Alimentos Actualizado(Alimentos Fcomida, ArrayList<Alimentos> FlistaAlimentos) {
+    /**
+     * Actualizado: pide el nobmre de un alimento, lee() y muestra las características registradas del mismo,
+     * y se ingresan nuevos valores del alimento en variables auxiliares.
+     * Por último se borra() en registro.txt el alimento, y se guarda() el alimento nuevo.
+     */
+    public static void Actualizado() throws IOException {
         Scanner sc = new Scanner(System.in);
         String Fnombre;
         double FHC, FPr, FL;
         System.out.println("Ingrese el nuevo nombre del alimento");
-        Fnombre = sc.next();
-        System.out.printf("Hidratos de carbono: %f \n Ingrese nuevo valor:", Fcomida.getHidratos());
+        Alimentos a = Clases.Registro.lectura(sc.next());
+        Fnombre = a.getNombreAlimento();
+        System.out.printf("Hidratos de carbono: %f \n Ingrese nuevo valor:", a.getHidratos());
         FHC = Double.parseDouble(sc.next());
-        System.out.printf("Proteínas: %f \n Ingrese nuevo valor:", Fcomida.getProteinas());
+        System.out.printf("Proteínas: %f \n Ingrese nuevo valor:", a.getProteinas());
         FPr = Double.parseDouble(sc.next());
-        System.out.printf("Lípidos: %f \n Ingrese nuevo valor:", Fcomida.getLipidos());
+        System.out.printf("Lípidos: %f \n Ingrese nuevo valor:", a.getLipidos());
         FL = Double.parseDouble(sc.next());
-        FlistaAlimentos.remove(Fposicion);
-        Fcomida = new Alimentos(Fnombre, FHC, FPr, FL);
-        return Fcomida;
+        Clases.Registro.borrar(Fnombre);
+        Clases.Registro.guardar(Fnombre, FHC, FPr, FL);
     }
 
-    public static void Calculo(ArrayList<Alimentos> FlistaAlimentos) throws IOException {
+    /**
+     * En Calculo() se pide en cada ciclo el nombre de alimentos que se quiere comer y se guarda en acumuladores
+     * tanto los nombres de los alimentos como sus macronutrientes.
+     * Por ahora no lo calculo dependiendo de la cantidad de comida que se coma.
+     * @throws IOException
+     */
+    public static void Calculo() throws IOException {
         Scanner sc = new Scanner(System.in);
         boolean flagSalidaDoCalculo = true;
 
         //Acumuladores
         double acum_hidrato = 0, acum_proteina = 0, acum_lipido = 0;
+        String acum_nombres = "";
 
         do {
             System.out.println("Ingrese el nombre del alimento");
             String buscado = sc.next();
             Alimentos aux = Clases.Registro.lectura(buscado);
 
-            acum_hidrato += aux.getHidratos();
+            acum_hidrato += Objects.requireNonNull(aux).getHidratos();
             acum_proteina += aux.getProteinas();
             acum_lipido += aux.getLipidos();
+            acum_nombres = acum_nombres + ", ";
 
-            System.out.printf("Totales \nHidratos: %f \tProteínas: %f \tLipidos: %f \n", acum_hidrato, acum_proteina, acum_lipido);
+            System.out.printf("Totales \nHidratos: %f \tProteínas: %f \tLipidos: %f \nAlimentos ingresados: %d",
+                    acum_hidrato, acum_proteina, acum_lipido, acum_nombres);
 
             System.out.println("¿Desea ingresar otro alimento?");
             if (sc.next().equals("no")) {
-                flagSalidaDoCalculo = false; // ¿¿¿
+                flagSalidaDoCalculo = false; // ¿¿
             }
         } while (flagSalidaDoCalculo);
 
