@@ -123,13 +123,15 @@ public class Principal {
             System.out.println("Ingrese el nombre del alimento");
             String buscado = sc.next();
             Alimentos aux = Clases.Registro.lectura(buscado);
+            System.out.println("Ingrese la cantidad en gramos");
+            double cant = (sc.nextDouble()/100);
 
-            acum_hidrato += Objects.requireNonNull(aux).getHidratos();
-            acum_proteina += aux.getProteinas();
-            acum_lipido += aux.getLipidos();
+            acum_hidrato += aux.getHidratos() * cant;
+            acum_proteina += aux.getProteinas() * cant;
+            acum_lipido += aux.getLipidos() * cant;
             acum_nombres = acum_nombres + ", ";
 
-            System.out.printf("Totales \nHidratos: %f \tProteínas: %f \tLipidos: %f \nAlimentos ingresados: %d",
+            System.out.printf("Totales \nHidratos: %f \tProteínas: %f \tLipidos: %f \nAlimentos ingresados: %s",
                     acum_hidrato, acum_proteina, acum_lipido, acum_nombres);
 
             System.out.println("¿Desea ingresar otro alimento?");
